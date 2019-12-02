@@ -1,0 +1,121 @@
+﻿<Window x:Class="WpfApp3.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp3"
+        mc:Ignorable="d"
+        Title="Comandos y menús" Height="450" Width="800" Icon="iconos/menu.ico">
+    <Window.Resources>
+        <Style TargetType="ToolBar" x:Key="barraGeneral">
+            <Setter Property="Visibility" Value="Visible"/>
+            <Style.Triggers>
+                <DataTrigger  Binding="{Binding ElementName= BarraGeneralCheckMenuItem, Path=IsChecked}" Value="False">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="ToolBar" x:Key="barraEdicion">
+            <Setter Property="Visibility" Value="Visible"/>
+            <Style.Triggers>
+                <DataTrigger  Binding="{Binding ElementName= BarraEdicionCheckMenuItem, Path=IsChecked}" Value="False">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+
+    <Window.CommandBindings>
+        <CommandBinding
+            Command="ApplicationCommands.New"
+            Executed="CommandArchivoNuevo_Executed"
+            CanExecute="CommandArchivoNuevo_CanExecute"/>
+        <CommandBinding
+            Command="ApplicationCommands.Copy"
+            Executed="CommandEditarCopiar_Executed"
+            CanExecute="CommandEditarCopiar_CanExecute"/>
+        <CommandBinding
+            Command="ApplicationCommands.Paste"
+            Executed="CommandEditarPegar_Executed"
+            CanExecute="CommandEditarPegar_CanExecute"/>
+        <CommandBinding
+            Command="local:ContenedorComandos.Salir"
+            Executed="CommandArchivoSalir_Executed"
+            />
+        <CommandBinding
+            Command="local:ContenedorComandos.Vaciar"
+            Executed="CommandEditarVaciar_Executed"
+            CanExecute="CommandEditarVaciar_CanExecute"/>
+
+    </Window.CommandBindings>
+    <DockPanel x:Name="PanelPrincipalDockPanel">
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_Archivo">
+                <MenuItem Header="_Nuevo" InputGestureText="Ctrl+N" Command="ApplicationCommands.New">
+                    <MenuItem.Icon>
+                        <Image Source="iconos\add.ico"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="_Salir" InputGestureText="Ctrl+S" Command="local:ContenedorComandos.Salir">
+                    <MenuItem.Icon>
+                        <Image Source="iconos\exit.ico"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="_Editar">
+                <MenuItem Header="_Copiar" InputGestureText="Ctrl+C" Command="ApplicationCommands.Copy" CommandTarget="{Binding ElementName=ListaPrincipalListBox, Path=SelectedItem}">
+                    <MenuItem.Icon>
+                        <Image Source="iconos/copy.ico"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="_Pegar" InputGestureText="Ctrl+V" Command="ApplicationCommands.Paste" CommandTarget="{Binding ElementName=ListaPrincipalListBox}">
+                    <MenuItem.Icon>
+                        <Image Source="iconos/paste.ico"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="_Vaciar" InputGestureText="Ctrl+D" Command="local:ContenedorComandos.Vaciar">
+                    <MenuItem.Icon>
+                        <Image Source="iconos/delete.ico"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="Ver">
+                <MenuItem x:Name="BarraGeneralCheckMenuItem" Header="Barra de herramientas General" IsCheckable="True" IsChecked="True"/>
+                <MenuItem x:Name="BarraEdicionCheckMenuItem" Header="Barra de herramientas Edición" IsCheckable="True" IsChecked="True"/>
+            </MenuItem>
+        </Menu>
+        <ToolBarTray DockPanel.Dock="Top">
+            <ToolBar Style="{StaticResource barraGeneral}">
+                <Button ToolTip="Nuevo" Command="ApplicationCommands.New">
+                    <Image Source="iconos\add.ico"/>
+                </Button>
+                <Button ToolTip="Salir" Command="local:ContenedorComandos.Salir">
+                    <Image Source="iconos\exit.ico"/>
+                </Button>
+            </ToolBar>
+            <ToolBar Style="{StaticResource barraEdicion}">
+                <Button ToolTip="Copiar" Command="ApplicationCommands.Copy" CommandTarget="{Binding ElementName=ListaPrincipalListBox, Path=SelectedItem}">
+                    <Image Source="iconos\copy.ico"/>
+                </Button>
+                <Button ToolTip="Pegar" Command="ApplicationCommands.Paste" CommandTarget="{Binding ElementName=ListaPrincipalListBox}">
+                    <Image Source="iconos\paste.ico"/>
+                </Button>
+                <Button ToolTip="Vaciar" Command="local:ContenedorComandos.Vaciar">
+                    <Image Source="iconos\delete.ico"/>
+                </Button>
+            </ToolBar>
+        </ToolBarTray>
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBarItem>
+                <TextBlock Text="Jordi LLinares Núñez"></TextBlock>
+            </StatusBarItem>
+
+            <StatusBarItem HorizontalAlignment="Right">
+                <TextBlock x:Name="barraTiempoTextBlock"></TextBlock>
+            </StatusBarItem>
+        </StatusBar>
+        <ListBox x:Name="ListaPrincipalListBox" ItemsSource="{Binding}" Margin="10"></ListBox>
+    </DockPanel>
+</Window>
